@@ -52,7 +52,7 @@ Rows where 'row_num > 1' were identified as duplicates and removed.
 
 4. Standardized inconsistent values
 
-Industry column contained entries like 'Crypto','Cryptocurrency' and 'Crypto Currency' all are referring to the same which were standardized into single term,'Crypto'. Similarly for country column 'United States' and 'United States.' were standardized into 'United States'.
+  Industry column contained entries like 'Crypto','Cryptocurrency' and 'Crypto Currency' all are referring to the same which were standardized into single term,'Crypto'. Similarly for country column 'United         States' and 'United States.' were standardized into 'United States'.
 ```sql
 update layoffs_cleaned
 set industry= 'Crypto'
@@ -69,6 +69,7 @@ set `date`=STR_TO_DATE(`date`,'%m/%d/%Y');
 
 ## Exploratory Data Analysis
 After cleaning the dataset, exploratory data analysis was performed to identify patterns and trends in global layoffs.
+
 1. Companies with Highest layoffs
 Analyzed total layoffs group by company to determine which organizations were most impacted.
 ```sql
@@ -78,6 +79,7 @@ group by company
 order by total_layoffs desc;
 ```
 This helped identify companies with the highest number of layoffs.
+
 2. Companies with 100% layoffs
 Identified companies where 100% of employees were laid off.
 ```sql
@@ -87,6 +89,7 @@ where percentage_laid_off = 1
 order by funds_raised_millions desc;
 ```
 This provided insight into companies that completely shut down operations.
+
 3. Date Range of Layoffs
 ```sql
 select min(`date`) as start_date,
@@ -94,6 +97,7 @@ select min(`date`) as start_date,
 from layoffs_cleaned;
 ```
 This helped understand the overall timeline of layoffs.
+
 4. Industry-Wise Layoff
 ```sql
 select industry, sum(total_laid_off) as total_layoffs
@@ -102,6 +106,7 @@ group by industry
 order by total_layoffs desc;
 ```
 This helps in Analysing which industry is most affected.
+
 5. Country-Wise Layoff
 ```sql
 select country, sum(total_laid_off) as total_layoffs
@@ -110,6 +115,7 @@ group by country
 order by total_layoffs desc;
 ```
 Analysed layoffs across different Countries.
+
 6. Year-Wise Layoff Trends
 ```sql
 select 
@@ -120,6 +126,7 @@ group by year(`date`)
 order by year;
 ```
 This helped identify peak layoff years.
+
 7. Top 5 Companies by Total Layoffs
 ```sql
 select company, 
