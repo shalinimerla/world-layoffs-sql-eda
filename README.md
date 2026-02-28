@@ -51,6 +51,7 @@ Rows where 'row_num > 1' were identified as duplicates and removed.
 - Used self-join logic to populate missing industry values from existing company records.
 
 4. Standardized inconsistent values
+
 Industry column contained entries like 'Crypto','Cryptocurrency' and 'Crypto Currency' all are referring to the same which were standardized into single term,'Crypto'. Similarly for country column 'United States' and 'United States.' were standardized into 'United States'.
 ```sql
 update layoffs_cleaned
