@@ -48,11 +48,13 @@ select *,row_number() over(partition by company,location,industry,total_laid_off
 Rows where 'row_num > 1' were identified as duplicates and removed.
  
 3. Handled NULL values
+
 - Identified records where both 'total_laid_off' and 'percentage_laid_off' were NULL and removed those records.
 - Converted empty string values in the 'industry' column to NULL.
 - Used self-join logic to populate missing industry values from existing company records.
 
 4. Standardized inconsistent values
+
 - Industry column contained entries like 'Crypto','Cryptocurrency' and 'Crypto Currency' all are referring to the same which were standardized into single term,'Crypto'.
  -Similarly for country column 'United         States' and 'United States.' were standardized into 'United States'.
 ```sql
@@ -63,7 +65,7 @@ where industry like 'Crypto%';
 
 5. Converted date formats
 
-The data type of date was changed from 'text' into 'date'.
+The data type of `date` was changed from 'text' into 'date'.
 ```sql
 update layoffs_cleaned
 set `date`=STR_TO_DATE(`date`,'%m/%d/%Y');
