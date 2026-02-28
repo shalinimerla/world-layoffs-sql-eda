@@ -142,7 +142,9 @@ group by company
 order by total_layoffs desc
 limit 5;
 ```
+
 This helped identify the top 5 companies with the highest total layoffs.
+
 ---
 
 ## Key Insights
