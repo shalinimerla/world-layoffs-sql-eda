@@ -27,7 +27,8 @@ Dataset Source: https://www.kaggle.com/datasets/vardhannharsh/world-layoffs?sele
 ---
 
 ## Data Cleaning Steps
-1. Created a Staging Table 
+1. Created a Staging Table
+
 To preserve the original raw dataset, a staging table was created:
 ```sql
 create table layoffs_cleaned
@@ -39,6 +40,7 @@ select* from layoffs;
 This created a new staging table called 'layoffs_cleaned' to safely perform data cleaning operations.
 
 2. Removed duplicate records
+
 To identify and remove the duplicates we have to add one more column called row_num which will show the duplicate rows.
 ```sql
 select *,row_number() over(partition by company,location,industry,total_laid_off,percentage_laid_off,`date`,stage,country,funds_raised_millions) row_num from layoffs_cleaned;
@@ -51,14 +53,16 @@ Rows where 'row_num > 1' were identified as duplicates and removed.
 - Used self-join logic to populate missing industry values from existing company records.
 
 4. Standardized inconsistent values
-
-  Industry column contained entries like 'Crypto','Cryptocurrency' and 'Crypto Currency' all are referring to the same which were standardized into single term,'Crypto'. Similarly for country column 'United         States' and 'United States.' were standardized into 'United States'.
+- Industry column contained entries like 'Crypto','Cryptocurrency' and 'Crypto Currency' all are referring to the same which were standardized into single term,'Crypto'.
+ -Similarly for country column 'United         States' and 'United States.' were standardized into 'United States'.
 ```sql
 update layoffs_cleaned
 set industry= 'Crypto'
 where industry like 'Crypto%';
 ```
+
 5. Converted date formats
+
 The data type of date was changed from 'text' into 'date'.
 ```sql
 update layoffs_cleaned
