@@ -1,10 +1,8 @@
--- ============================================
--- World Layoffs Data Cleaning Project
--- ============================================
-
 use world_layoff;
+select * from layoffs;
 
 -- Create Staging Table (Preserve Raw Data)
+
 create table layoffs_staging
 like layoffs;
 
@@ -14,11 +12,13 @@ select * from layoffs;
 -- Remove Duplicates Using ROW_NUMBER()
 
 with duplicate_cte as (
-select *,row_number() over 
-  (partition by company,location,industry,total_laid_off,percentage_laid_off,`date`,stage,country,funds_raised_millions) 
-  as row_num from layoffs_staging 
-)
-select * from duplicate_cte where row_num>1;
+select *,
+row_number() over(
+partition by company,location,industry,total_laid_off,percentage_laid_off,`date`,stage,country,funds_raised_millions) 
+  as row_num 
+from layoffs_staging )
+select * from duplicate_cte 
+where row_num>1;
 
 CREATE TABLE `layoffs_cleaned` (
   `company` text,
@@ -35,10 +35,11 @@ CREATE TABLE `layoffs_cleaned` (
 select * from layoffs_cleaned;
 
 insert into layoffs_cleaned
-select *,row_number() over (
-  partition by company,location,industry,total_laid_off,percentage_laid_off,`date`,stage,country,funds_raised_millions)
+select *,
+row_number() over(
+partition by company,location,industry,total_laid_off,percentage_laid_off,`date`,stage,country,funds_raised_millions)
   as row_num 
-  from layoffs_staging;
+from layoffs_staging;
 
 delete from layoffs_cleaned where row_num>1;
 
@@ -49,24 +50,25 @@ set company=trim(company);
 
 update layoffs_cleaned
 set industry = 'Crypto'
-where industry = 'Crypto%';
+where industry like 'Crypto%';
 
 update layoffs_cleaned
 set country = 'United States'
-where country = 'United States%';
+where country like 'United States%';
 
 -- Convert Date Column from TEXT to DATE
+
 update layoffs_cleaned
 set `date`=STR_TO_DATE(`date`,'%m/%d/%Y');
 
 alter table layoffs_cleaned
 modify column `date` DATE;
 
-
 -- Handle Missing Values
+
 update layoffs_cleaned
 set industry = null 
-where industry like '';
+where industry = '';
 
 update layoffs_cleaned t1 join layoffs_cleaned t2
 on t1.company=t2.company 
@@ -81,3 +83,6 @@ and percentage_laid_off is null;
 -- Remove Helper Column
 alter table layoffs_cleaned
 drop column row_num;
+
+select * from layoffs_cleaned 
+order by 1;
